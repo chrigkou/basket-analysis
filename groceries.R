@@ -1,8 +1,7 @@
-
 groceries.src<-read.csv("GroceriesInitial.csv",header=TRUE,sep=",", na.strings=c("","NA"))
 library(ggplot2)
 p<-ggplot(groceries.src,aes(x=1,y=basket_value,fill=1))+geom_boxplot()
-outlier_values<-boxplot.stats(groceries.src$basket_value)$out# οι τιμές των out-lier
+outlier_values<-boxplot.stats(groceries.src$basket_value)$out # get outliers 
 
 
 #discretize the basket value
@@ -16,15 +15,16 @@ groceries.src$basket_value<-cut2(groceries.src$basket_value,g = 3)
 levels(groceries.src$basket_value)<-c("_low","_medium","_high") 
 
 #put all items from a row in a list
-groceries.src$Item <-gsub(',NA','',with(groceries.src,paste(groceries.src$Item_1,groceries.src$Item_2,groceries.src$Item_3,groceries.src$Item_4,groceries.src$Item_5,groceries.src$Item_6,groceries.src$Item_7,groceries.src$Item_8,groceries.src$Item_9,groceries.src$Item_10,groceries.src$Item_11,groceries.src$Item_12,groceries.src$Item_13,groceries.src$Item_14,groceries.src$Item_15,groceries.src$Item_16,groceries.src$Item_17,groceries.src$Item_18, groceries.src$Item_19,groceries.src$Item_20,groceries.src$Item_21,groceries.src$Item_22,groceries.src$Item_23,groceries.src$Item_24,groceries.src$Item_25,groceries.src$Item_26,groceries.src$Item_26,groceries.src$Item_27,groceries.src$Item_28,groceries.src$Item_29,groceries.src$Item_30,groceries.src$Item_31,groceries.src$Item_32,sep = ",")))
-
+groceries.src$Item <- NULL
 for (i in 1:32)
 {
   name<-paste(c("Item", i), collapse= "_")
+  groceries.src$Item <- paste(groceries.src$Item,groceries.src[,name])
   groceries.src[,name]<-NULL
 }
+View(groceries.src)
 
-#select some products
+#select some products to find rules
 cho <- list("citrus fruit","tropical fruit","whole milk","other vegetables","rolls/buns","chocolate","bottled water","yogurt","sausage","root vegetables","pastry","soda","cream")
 
 for (food in cho){
